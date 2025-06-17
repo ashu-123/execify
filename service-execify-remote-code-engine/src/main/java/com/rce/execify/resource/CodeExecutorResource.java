@@ -1,6 +1,6 @@
 package com.rce.execify.resource;
 
-import com.rce.execify.model.CodeInputRequestDto;
+import com.rce.execify.model.CodeRequestDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,13 +14,13 @@ import java.io.*;
 public class CodeExecutorResource {
 
     @PostMapping("/execute")
-    public ResponseEntity<String> executeCode(@RequestBody CodeInputRequestDto codeInputRequestDto) {
+    public ResponseEntity<String> executeCode(@RequestBody CodeRequestDto codeRequestDto) {
 
         try {
             // Step 1: Write the code to a file
             File sourceFile = new File("MyProgram.java");
             try (FileWriter writer = new FileWriter(sourceFile)) {
-                writer.write(codeInputRequestDto.getCode());
+                writer.write(codeRequestDto.getCode());
             }
 
             // Step 2: Compile the Java program
