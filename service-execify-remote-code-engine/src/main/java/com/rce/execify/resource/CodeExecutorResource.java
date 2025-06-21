@@ -4,13 +4,11 @@ import com.rce.execify.model.CodeRequestDto;
 import com.rce.execify.model.CodeResponseDto;
 import com.rce.execify.service.CodeExecutorService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/code")
+@CrossOrigin
 public class CodeExecutorResource {
 
     private final CodeExecutorService codeExecutorService;
