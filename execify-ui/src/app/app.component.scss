@@ -1,0 +1,29 @@
+.code-runner {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  select {
+    width: 200px;
+    padding: 4px;
+  }
+
+  .editor {
+    height: 400px;
+    border: 1px solid #ccc;
+  }
+
+  button {
+    width: 100px;
+    padding: 8px;
+    align-self: flex-start;
+  }
+
+  .output {
+    background-color: #1e1e1e;
+    color: #0f0;
+    padding: 1rem;
+    border-radius: 5px;
+    white-space: pre-wrap;
+  }
+}
