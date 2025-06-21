@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CodeExecutionService {
-  private apiUrl = 'http://localhost:8080/code/execute'; // Change to your backend URL
+  private apiUrl = 'http://localhost:8080/code/execute';
 
   constructor(private http: HttpClient) {}
 
