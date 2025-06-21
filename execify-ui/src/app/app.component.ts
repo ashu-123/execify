@@ -47,6 +47,5 @@ export class AppComponent {
       .subscribe({
         next: (res) => this.output = res.output
       });
-    this.output = `Running code in ${this.selectedLanguage}:\n\n${this.code}`;
   }
 }
