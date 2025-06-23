@@ -1,13 +1,21 @@
 package com.rce.execify.service;
 
-import com.rce.execify.model.CodeRequestDto;
-import com.rce.execify.model.CodeResponseDto;
+import com.rce.execify.model.dto.CodeRequestDto;
+import com.rce.execify.model.dto.CodeResponseDto;
+import com.rce.execify.model.entity.Code;
+import com.rce.execify.repository.CodeExecutorRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 
 @Service
 public class CodeExecutorService {
+
+    private final CodeExecutorRepository codeExecutorRepository;
+
+    public CodeExecutorService(CodeExecutorRepository codeExecutorRepository) {
+        this.codeExecutorRepository = codeExecutorRepository;
+    }
 
     public CodeResponseDto process(CodeRequestDto codeRequestDto) {
 
@@ -16,7 +24,9 @@ public class CodeExecutorService {
         try {
 
             File inputFile = createInputFile(codeRequestDto.getCode());
-
+            Code code = new Code();
+            code.setProgram(codeRequestDto.getCode());
+            codeExecutorRepository.save(code);
             Process compile = compile(inputFile.getName());
             int compilationResult = compile.waitFor();
             if (compilationResult != 0) {

@@ -1,7 +1,7 @@
 package com.rce.execify.resource;
 
-import com.rce.execify.model.CodeRequestDto;
-import com.rce.execify.model.CodeResponseDto;
+import com.rce.execify.model.dto.CodeRequestDto;
+import com.rce.execify.model.dto.CodeResponseDto;
 import com.rce.execify.service.CodeExecutorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
