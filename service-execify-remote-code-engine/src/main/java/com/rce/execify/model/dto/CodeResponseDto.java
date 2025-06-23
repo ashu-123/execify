@@ -1,4 +1,4 @@
-package com.rce.execify.model;
+package com.rce.execify.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
