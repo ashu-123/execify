@@ -3,8 +3,11 @@ package com.rce.execify.resource;
 import com.rce.execify.model.dto.CodeRequestDto;
 import com.rce.execify.model.dto.CodeResponseDto;
 import com.rce.execify.service.CodeExecutorService;
+import com.rce.execify.service.DockerCodeExecutor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/code")
@@ -13,14 +16,18 @@ public class CodeExecutorResource {
 
     private final CodeExecutorService codeExecutorService;
 
-    public CodeExecutorResource(CodeExecutorService codeExecutorService) {
+    private final DockerCodeExecutor dockerCodeExecutor;
+
+    public CodeExecutorResource(CodeExecutorService codeExecutorService,
+                                DockerCodeExecutor dockerCodeExecutor) {
         this.codeExecutorService = codeExecutorService;
+        this.dockerCodeExecutor = dockerCodeExecutor;
     }
 
     @PostMapping("/execute")
-    public ResponseEntity<CodeResponseDto> process(@RequestBody CodeRequestDto codeRequestDto) {
-        var codeResponse = codeExecutorService.process(codeRequestDto);
-        return ResponseEntity.ok(codeResponse);
+    public ResponseEntity<CodeResponseDto> process(@RequestBody CodeRequestDto codeRequestDto) throws IOException, InterruptedException {
+        CodeResponseDto codeResponseDto = dockerCodeExecutor.runJavaCode(codeRequestDto);
+        return ResponseEntity.ok(codeResponseDto);
     }
 
 
