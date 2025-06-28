@@ -2,7 +2,7 @@ package com.rce.execify.service;
 
 import com.rce.execify.model.dto.CodeRequestDto;
 import com.rce.execify.model.dto.CodeResponseDto;
-import com.rce.execify.model.mapper.CodeMapper;
+import com.rce.execify.mapper.CodeMapper;
 import com.rce.execify.repository.CodeExecutorRepository;
 import com.rce.execify.util.CheckedFunction;
 import org.springframework.stereotype.Service;

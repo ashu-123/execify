@@ -1,4 +1,4 @@
-package com.rce.execify.model.mapper;
+package com.rce.execify.mapper;
 
 import com.rce.execify.model.dto.CodeRequestDto;
 import com.rce.execify.model.entity.Code;
