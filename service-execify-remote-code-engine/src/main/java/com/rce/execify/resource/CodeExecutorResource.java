@@ -2,33 +2,27 @@ package com.rce.execify.resource;
 
 import com.rce.execify.model.dto.CodeRequestDto;
 import com.rce.execify.model.dto.CodeResponseDto;
-import com.rce.execify.service.CodeExecutorService;
-import com.rce.execify.service.DockerCodeExecutor;
+import com.rce.execify.service.DockerCodeExecutorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/code")
 @CrossOrigin
 public class CodeExecutorResource {
 
-    private final CodeExecutorService codeExecutorService;
+    private final DockerCodeExecutorService dockerCodeExecutorService;
 
-    private final DockerCodeExecutor dockerCodeExecutor;
-
-    public CodeExecutorResource(CodeExecutorService codeExecutorService,
-                                DockerCodeExecutor dockerCodeExecutor) {
-        this.codeExecutorService = codeExecutorService;
-        this.dockerCodeExecutor = dockerCodeExecutor;
+    public CodeExecutorResource(DockerCodeExecutorService dockerCodeExecutorService) {
+        this.dockerCodeExecutorService = dockerCodeExecutorService;
     }
 
     @PostMapping("/execute")
-    public ResponseEntity<CodeResponseDto> process(@RequestBody CodeRequestDto codeRequestDto) throws IOException, InterruptedException {
-        CodeResponseDto codeResponseDto = dockerCodeExecutor.runJavaCode(codeRequestDto);
-        return ResponseEntity.ok(codeResponseDto);
+    public Mono<ResponseEntity<CodeResponseDto>> process(@RequestBody CodeRequestDto codeRequestDto) {
+        return Mono.just(codeRequestDto)
+                .flatMap(dockerCodeExecutorService::runJavaCode)
+                .map(ResponseEntity::ok);
     }
-
 
 }

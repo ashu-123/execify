@@ -1,24 +1,22 @@
 package com.rce.execify.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
+@Document("code")
 public class Code {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private ObjectId id;
 
     private String program;
 
-    public Long getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public Code setId(Long id) {
+    public Code setId(ObjectId id) {
         this.id = id;
         return this;
     }
