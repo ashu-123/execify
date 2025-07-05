@@ -33,39 +33,20 @@ public class DockerCodeExecutorService {
                 .flatMap(codeExecutorRepository::save)
                 .map(CodeMapper::toDto)
                 .map(CodeRequestDto::getCode)
-                .map(CheckedFunction.unchecked(c -> this.createFile(c)))
+                .map(CheckedFunction.unchecked(this::createFile))
                 .flatMap(this::compileProcess)
-                .flatMap(process -> {
-                    return this.streamOutput(process)
-                            .collect(Collectors.joining("\n"))
-                            .map(CheckedFunction.unchecked(c -> {
-                                int compilationResult = 0;
-                                compilationResult = process.waitFor();
-                                return compilationResult;
-                            }))
-                            .subscribeOn(Schedulers.boundedElastic());
-                })
+                .flatMap(process -> this.streamOutput(process)
+                        .collect(Collectors.joining("\n"))
+                        .map(CheckedFunction.unchecked(c -> process.waitFor()))
+                        .subscribeOn(Schedulers.boundedElastic()))
                 .filter(res -> res == 1)
                 .then(this.executeProcess())
-                .flatMap(process -> {
-                    return this.streamOutput(process)
-                            .collect(Collectors.joining("\n"))
-                            .zipWhen(c -> {
-                                return Mono.just(process)
-                                        .map(CheckedFunction.unchecked(p -> {
-                                            int compilationResult = 0;
-                                            compilationResult = process.waitFor();
-                                            return compilationResult;
-                                        }))
-                                        .subscribeOn(Schedulers.boundedElastic());
-                            });
-                })
-                .map(c -> {
-                    String output = c.getT1();
-                    int executionResult = c.getT2();
-                    CodeResponseDto codeResponseDto = new CodeResponseDto().setExitCode(executionResult).setOutput(output);
-                    return codeResponseDto;
-                });
+                .flatMap(process -> this.streamOutput(process)
+                        .collect(Collectors.joining("\n"))
+                        .zipWhen(c -> Mono.just(process)
+                                .map(CheckedFunction.unchecked(p -> process.waitFor()))
+                                .subscribeOn(Schedulers.boundedElastic())))
+                .map(c -> new CodeResponseDto().setExitCode(c.getT2()).setOutput(c.getT1()));
     }
 
     private Flux<String> streamOutput(Process compile) {
